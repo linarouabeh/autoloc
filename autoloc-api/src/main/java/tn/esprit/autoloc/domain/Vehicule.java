@@ -1,12 +1,10 @@
 package tn.esprit.autoloc.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "vehicule")
@@ -39,4 +37,26 @@ public class Vehicule {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private StatutVehicule statut;
+
+    // N Vehicule -> 1 Agence
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "agence_id")
+    private Agence agence;
+
+    // N Vehicule <-> N Equipement (table de jointure)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "vehicule_equipement",
+            joinColumns = @JoinColumn(name = "vehicule_id"),
+            inverseJoinColumns = @JoinColumn(name = "equipement_id")
+    )
+    private List<Equipement> equipements;
+
+    // 1 Vehicule -> N Maintenance (cascade PERSIST)
+    @OneToMany(mappedBy = "vehicule", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private List<Maintenance> maintenances;
+
+    // 1 Vehicule -> N Reservation
+    @OneToMany(mappedBy = "vehicule", fetch = FetchType.LAZY)
+    private List<Reservation> reservations;
 }

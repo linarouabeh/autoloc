@@ -1,12 +1,10 @@
 package tn.esprit.autoloc.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "client")
@@ -29,7 +27,7 @@ public class Client {
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(length = 20)
+    @Column(nullable = false, length = 20)
     private String telephone;
 
     @Column(nullable = false, unique = true, length = 30)
@@ -37,4 +35,7 @@ public class Client {
 
     @Column(nullable = false)
     private LocalDate dateInscription;
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private List<Reservation> reservations;
 }
