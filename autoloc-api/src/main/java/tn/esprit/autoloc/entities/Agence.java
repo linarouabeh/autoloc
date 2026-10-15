@@ -1,4 +1,4 @@
-package tn.esprit.autoloc.domain;
+package tn.esprit.autoloc.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,11 +29,9 @@ public class Agence {
     @Column(nullable = false, length = 20)
     private String telephone;
 
-    // 1 Agence -> N Vehicule (pas de cascade de suppression)
     @OneToMany(mappedBy = "agence", fetch = FetchType.LAZY)
     private List<Vehicule> vehicules;
 
-    // 1 Agence -> N Employee
     @OneToMany(mappedBy = "agence", fetch = FetchType.LAZY)
     private List<Employee> employees;
 }
